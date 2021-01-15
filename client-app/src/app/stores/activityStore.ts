@@ -6,11 +6,9 @@ import agent from '../api/agent';
 configure({enforceActions: 'always'});
 
 class ActivityStore {
-    @observable activityRegistry = new Map();
-    @observable activities: IActivity[] = [];
-    @observable selectedActivity: IActivity | undefined;
-    @observable loadingInitial = false;
-    @observable editMode = false;
+    @observable activityRegistry = new Map();    
+    @observable activity: IActivity | null = null;
+    @observable loadingInitial = false;    
     @observable submitting = false;
     @observable target = '';
 
@@ -19,8 +17,6 @@ class ActivityStore {
             (a, b) => Date.parse(a.date) - Date.parse(b.date)
         );
     }
-
-    //TODO: Figured out how to works runInAction('string', func) on Mobx 6.0.4
 
     @action loadActivities = async () => {
         this.loadingInitial = true;
@@ -42,13 +38,45 @@ class ActivityStore {
         }
     };
 
+    @action loadActivity = async (id: string) => {
+        let activity = this.getActivity(id);
+
+        if(activity) {
+            this.activity = activity;
+        }
+        else {
+            this.loadingInitial = true;
+            try {
+                activity = await agent.Activities.details(id);
+                runInAction(() => {
+                    this.activity = activity;
+                    this.loadingInitial = false;
+                });
+            }
+            catch(error) 
+            {
+                runInAction(() => { 
+                    this.loadingInitial = false;
+                });
+                console.log(error);
+            }
+        }
+    }
+
+    @action clearActivity = () => {
+        this.activity = null;
+    }
+
+    getActivity = (id: string) => {
+        return this.activityRegistry.get(id);
+    }
+
     @action createActivity = async (activity: IActivity) => {
         this.submitting = true;
         try {
             await agent.Activities.create(activity);
             runInAction(() => {
-                this.activityRegistry.set(activity.id, activity);
-                this.editMode = false;
+                this.activityRegistry.set(activity.id, activity);               
                 this.submitting = false;
             });
             
@@ -67,8 +95,7 @@ class ActivityStore {
             await agent.Activities.update(activity);
             runInAction(() => {                
                 this.activityRegistry.set(activity.id, activity);
-                this.selectedActivity = activity;
-                this.editMode = false;
+                this.activity = activity;
                 this.submitting = false;
             });
         }
@@ -101,50 +128,9 @@ class ActivityStore {
         }
     }
 
-    @action openCreateForm = () => {
-        this.editMode = true;
-        this.selectedActivity = undefined;
-    }
-
-    @action openEditForm = (id: string) => {
-        this.selectedActivity = this.activityRegistry.get(id);
-        this.editMode = true;
-    }
-
-    @action selectActivity = (id: string) => {
-        this.selectedActivity = this.activityRegistry.get(id);
-        this.editMode = false;
-    }
-
-    @action cancelFormOpen = () => {
-        this.editMode = false;
-    } 
-
-    @action cancelSelectedActivity = () => {
-        this.selectedActivity = undefined;
-    }
-
-    constructor(){
+    constructor() {
         makeObservable(this);
     }
 }
-
-/*decorate(ActivityStore, {
-    activityRegistry: observable,
-    activities: observable,
-    selectedActivity: observable,
-    loadingInitial: observable,
-    editMode: observable,
-    submittin: observable,
-    target: observable,
-    activitiesByDate: computed,
-    loadActivities: action,
-    createActivity: action,
-    editActivity: action,
-    deleteActivity: action,
-    cancelSelectedActivity: action,
-    cancelFormOpen: action,
-    selectActivity: action
-});*/
 
 export default createContext(new ActivityStore())
