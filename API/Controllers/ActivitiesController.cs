@@ -12,6 +12,7 @@ namespace API.Controllers
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
+        //TODO: Check date format 6 hours difference btw GMT 6
         private readonly IMediator _mediator;
         public ActivitiesController(IMediator mediator)
         {
