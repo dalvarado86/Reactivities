@@ -10,6 +10,15 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using FluentValidation.AspNetCore;
 using API.Middleware;
+using Domain;
+using Microsoft.AspNetCore.Identity;
+using Application.Interfaces;
+using Infrastructure.Secutiry;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace API
 {
@@ -38,10 +47,41 @@ namespace API
             });
 
             services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddControllers()
-                .AddFluentValidation(configuration => {
-                    configuration.RegisterValidatorsFromAssemblyContaining<Create>();
+            
+            //services.AddMvc()
+            //    .AddFluentValidation(configuration => 
+            //    {
+            //        configuration.RegisterValidatorsFromAssemblyContaining<Create>();
+            //    })
+            //    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);            
+            services.AddControllers(options => 
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            }).AddFluentValidation(configuration => 
+            {
+                configuration.RegisterValidatorsFromAssemblyContaining<Create>();
+            });
+
+            var builder = services.AddIdentityCore<AppUser>();
+            var identiyBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            identiyBuilder.AddEntityFrameworkStores<DataContext>();
+            identiyBuilder.AddSignInManager<SignInManager<AppUser>>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => 
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters 
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    };
                 });
+
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
+            services.AddScoped<IUserAccessor, UserAccesor>();
 
             services.AddSwaggerGen(c =>
             {
@@ -62,11 +102,12 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
-           //app.UseHttpsRedirection();
-            app.UseCors("CorsPolicy");
-
+            //Ordering does matter here. Check Microsoft documentation 
+            //https://docs.microsoft.com/en-us/aspnet/core/migration/22-to-30?view=aspnetcore-5.0&tabs=visual-studio#migrate-startupconfigure
             app.UseRouting();
-
+            app.UseCors("CorsPolicy");
+        
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
