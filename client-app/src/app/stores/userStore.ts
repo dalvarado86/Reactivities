@@ -52,8 +52,7 @@ export default class UserStore {
                 this.user = user;
             });
         }
-        catch(error)
-        {
+        catch(error) {
             console.log(error);
         }
     }
