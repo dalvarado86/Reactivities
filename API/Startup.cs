@@ -28,6 +28,16 @@ namespace API
             });
 
             services.AddInfrastructure(_config);
+
+            services.AddCors(opcions => 
+            {
+                opcions.AddPolicy("CorsPolicy", policy => 
+                {
+                    policy.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithOrigins(_config["Tokens:Audience"]);
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,7 +47,7 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reactivities API v1"));
             }
 
             //app.UseHttpsRedirection();
