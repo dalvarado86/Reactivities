@@ -21,23 +21,23 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reactivities API", Version = "v1" });
-            });
-
             services.AddInfrastructure(_config);
 
-            services.AddCors(opcions => 
+            services.AddCors(options => 
             {
-                opcions.AddPolicy("CorsPolicy", policy => 
+                options.AddPolicy("CorsPolicy", policy => 
                 {
                     policy.AllowAnyMethod()
                     .AllowAnyHeader()
                     .WithOrigins(_config["Tokens:Audience"]);
                 });
             });
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reactivities API", Version = "v1" });
+            });           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +53,8 @@ namespace API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
