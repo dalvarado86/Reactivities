@@ -1,5 +1,5 @@
 # Reactivities
-Based on the udemy course of [Neils Cummings](https://www.udemy.com/course/complete-guide-to-building-an-app-with-net-core-and-react/) and [Jason Taylor's blog](https://jasontaylor.dev/clean-architecture-getting-started/)
+Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App with .NET Core and React](https://www.udemy.com/course/complete-guide-to-building-an-app-with-net-core-and-react/), and post from Jason Taylor [Clean Architecture with .NET Core](https://jasontaylor.dev/clean-architecture-getting-started/)
 
 ## Features
 
@@ -46,7 +46,8 @@ This layer is a Web API based on ASP.NET Core 5. This layer depends on both the 
 
 ### Clien-App
 
-This is a client app based on React Js 17, and represent the front-end of this application.
+This is a client app based on React Js 17, it represent the front-end of this application.
 
 Enjoy!
-And if you want <a href="https://www.buymeacoffee.com/dealvarado" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+And if you want 
+<a href="https://www.buymeacoffee.com/dealvarado" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
