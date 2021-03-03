@@ -5,7 +5,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 
 ## Prerequisites
 * [.NET Core SDK](https://dotnet.microsoft.com/download) (5.0.1 or later)
-* [Node.js] (https://nodejs.org/en/download/current/) (15.9.0 or later)
+* [Node.js](https://nodejs.org/en/download/current/) (15.9.0 or later)
 
 ## Technologies
 
@@ -19,6 +19,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * MobX 6
 * Axios
 * Semantic UI React
+* UUID
 
 ## Getting Started
 
