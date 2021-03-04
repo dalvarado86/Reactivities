@@ -16,16 +16,35 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * FluentValidation
 
 ### React 17
-* MobX 6
+* MobX
 * Axios
 * Semantic UI React
 * UUID
+* React Router
 
 ## Getting Started
 
 ### Database Configuration
 
+The solution is configured to use Sqlite by default. Feel free to change to another database service as SQL Server or In-Memory Database if you want.
+
 ### Database Migration
+
+To use `dotnet-ef` for your migrations add the following flags to your command (values assume you are executing from the root folder)
+
+* `--project Infrastructure/`
+* `--startup-project API/`
+* `--output-dir Persistence/Migrations`
+
+For example, to add a new migration from the root folder:
+
+ `dotnet ef migrations add "MyMigration" --project Infrastructure/ --startup-project API/ --output-dir Persistence/Migrations`
+
+ Then, you need update de database from the startup project (API)
+ 
+ `dotnet ef database update`
+
+ **Important!** It needs to remove all migrations when changing a database service.
 
 ## Overview
 
@@ -47,7 +66,7 @@ This layer is a Web API based on ASP.NET Core 5. This layer depends on both the 
 
 ### Clien-App
 
-This is a client app based on React Js 17, it represent the front-end of this application.
+This is a client app based on React with typescript, it represent the front-end of this application.
 
 Enjoy!
 And if you want 
