@@ -18,9 +18,10 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 ### React 17
 * MobX
 * Axios
-* Semantic UI React
-* UUID
 * React Router
+* UUID
+* Semantic UI React
+* React Calendar
 
 ## Getting Started
 
