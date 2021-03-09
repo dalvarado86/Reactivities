@@ -2,16 +2,17 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using MediatR;
 
 namespace Application.Activities.Commands
 {
-    public class DeleteActivityCommand : IRequest
+    public class DeleteActivityCommand : IRequest<Result<Unit>>
     {
         public Guid Id { get; set; }
     }
 
-    public class HandlerDeleteActivityCommand : IRequestHandler<DeleteActivityCommand>
+    public class HandlerDeleteActivityCommand : IRequestHandler<DeleteActivityCommand, Result<Unit>>
     {
         private readonly IDataContext _context;
 
@@ -20,18 +21,21 @@ namespace Application.Activities.Commands
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
             var activity = await _context.Activities.FindAsync(request.Id);
 
+            //if(activity == null)
+            //    return null;
+
             _context.Activities.Remove(activity);
 
-            var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-            if (success)
-                return Unit.Value;
+            if (!result)
+                return Result<Unit>.Failure("Failed to delete the activity");
 
-            throw new Exception("Problem saving changes");
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

@@ -22,6 +22,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * UUID
 * Semantic UI React
 * React Calendar
+* React Toastify
 
 ## Getting Started
 

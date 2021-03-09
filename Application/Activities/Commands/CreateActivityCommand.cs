@@ -2,17 +2,27 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Domain.Entities;
+using FluentValidation;
 using MediatR;
 
 namespace Application.Activities.Commands
 {
-    public class CreateActivityCommand : IRequest
+    public class CreateActivityCommand : IRequest<Result<Unit>>
     {
         public Activity Activity { get; set; }
     }
 
-    public class HandlerCreateActivityCommand : IRequestHandler<CreateActivityCommand>
+    public class CreateActivityCommandValidator : AbstractValidator<CreateActivityCommand>
+    {
+        public CreateActivityCommandValidator()
+        {
+            RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+        }
+    }
+
+    public class HandlerCreateActivityCommand : IRequestHandler<CreateActivityCommand, Result<Unit>>
     {
         private readonly IDataContext _context;
 
@@ -21,16 +31,16 @@ namespace Application.Activities.Commands
             _context = context;
         }
 
-        public async Task<Unit> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
         {
             _context.Activities.Add(request.Activity);
 
-            var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-            if (success)
-                return Unit.Value;
+            if (!result)
+                return Result<Unit>.Failure("Failed to create activity");
 
-            throw new Exception("Problem saving changes");
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 
