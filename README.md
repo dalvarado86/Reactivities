@@ -23,6 +23,9 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * Semantic UI React
 * React Calendar
 * React Toastify
+* Formik + Yup
+* React Datepicker
+* Date-Fns
 
 ## Getting Started
 
