@@ -1,8 +1,14 @@
+using System.Text;
 using Application.Common.Interfaces;
+using Domain.Entities;
 using Infrastructure.Persistence;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure
 {
@@ -18,6 +24,27 @@ namespace Infrastructure
             });
 
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
+
+            // Adding Identity Service
+            services.AddIdentityCore<ApplicationUser>(options => {
+                options.Password.RequireNonAlphanumeric = false;                
+            })
+            .AddEntityFrameworkStores<DataContext>()
+            .AddSignInManager<SignInManager<ApplicationUser>>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Tokens:Key"])),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }

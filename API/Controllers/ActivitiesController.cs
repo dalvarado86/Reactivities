@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-
     public class ActivitiesController : BaseApiController
     {
          [HttpGet]

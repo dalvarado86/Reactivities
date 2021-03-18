@@ -14,6 +14,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * MediatR
 * Automapper
 * FluentValidation
+* ASP .NET Core Identity
 
 ### React 17
 * MobX
