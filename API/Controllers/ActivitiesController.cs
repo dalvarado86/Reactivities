@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
-         [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> GetActivities()
         {
             return HandleResult(await Mediator.Send(new GetActivitiesQuery()));
