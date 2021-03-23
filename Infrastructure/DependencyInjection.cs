@@ -2,8 +2,10 @@ using System.Text;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Infrastructure.Persistence;
+using Infrastructure.Security;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -42,9 +44,20 @@ namespace Infrastructure
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
-                });
+                });           
 
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserAccessor, UserAccessor>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsActivityHost", policy => 
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
             return services;
         }

@@ -1,30 +1,36 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Application.Common.DTOs;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Application.Activities.Queries
 {
-    public class GetActivitiesQuery : IRequest<Result<List<Activity>>> { }
+    public class GetActivitiesQuery : IRequest<Result<List<ActivityDto>>> { }
 
-    public class HandlerGetActivitiesCommand : IRequestHandler<GetActivitiesQuery, Result<List<Activity>>>
+    public class HandlerGetActivitiesCommand : IRequestHandler<GetActivitiesQuery, Result<List<ActivityDto>>>
     {
         private readonly IDataContext _context;
+        private readonly IMapper _mapper;
 
-        public HandlerGetActivitiesCommand(IDataContext context)
+        public HandlerGetActivitiesCommand(IDataContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
-        public async Task<Result<List<Activity>>> Handle(GetActivitiesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<ActivityDto>>> Handle(GetActivitiesQuery request, CancellationToken cancellationToken)
         {
-            return Result<List<Activity>>.Success(await _context.Activities.ToListAsync());
+            var activities = await _context.Activities
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
+            return Result<List<ActivityDto>>.Success(activities);
         }
     }
 }

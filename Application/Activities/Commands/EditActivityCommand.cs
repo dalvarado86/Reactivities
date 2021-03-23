@@ -12,10 +12,6 @@ namespace Application.Activities.Commands
 {
     public class EditActivityCommand : IRequest<Result<Unit>>
     {
-        public EditActivityCommand()
-        {
-        }
-
         public Activity Activity { get; set; }
     }
 

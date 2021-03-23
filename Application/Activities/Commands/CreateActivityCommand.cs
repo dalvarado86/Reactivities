@@ -6,6 +6,7 @@ using Application.Common.Models;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Activities.Commands
 {
@@ -25,14 +26,31 @@ namespace Application.Activities.Commands
     public class HandlerCreateActivityCommand : IRequestHandler<CreateActivityCommand, Result<Unit>>
     {
         private readonly IDataContext _context;
+        private readonly IUserAccessor _userAccessor;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HandlerCreateActivityCommand(IDataContext context)
+        public HandlerCreateActivityCommand(IDataContext context,
+            IUserAccessor userAccessor,
+            UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
+            _userAccessor = userAccessor;
             _context = context;
         }
 
         public async Task<Result<Unit>> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
         {
+            var user = await _userManager.FindByNameAsync(_userAccessor.GetUsername());
+
+            var attendee = new ActivityAttendee
+            {
+                ApplicationUser = user,
+                Activity = request.Activity,
+                IsHost = true
+            };
+
+            request.Activity.Attendees.Add(attendee);
+
             _context.Activities.Add(request.Activity);
 
             var result = await _context.SaveChangesAsync(cancellationToken) > 0;

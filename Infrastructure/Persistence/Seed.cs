@@ -11,7 +11,7 @@ namespace Infrastructure.Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<ApplicationUser> userManager)
         {
-            if(!userManager.Users.Any())
+            if (!userManager.Users.Any() && !context.Activities.Any())
             {
                 var users = new List<ApplicationUser>()
                 {
@@ -39,10 +39,7 @@ namespace Infrastructure.Persistence
                 {
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
-            }
 
-            if (!context.Activities.Any()) 
-            {
                 var activities = new List<Activity>
                 {
                     new Activity
@@ -53,6 +50,14 @@ namespace Infrastructure.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[0],
+                                IsHost = true
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -62,6 +67,19 @@ namespace Infrastructure.Persistence
                         Category = "culture",
                         City = "Paris",
                         Venue = "Louvre",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[0],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[1],
+                                IsHost = false
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -71,6 +89,20 @@ namespace Infrastructure.Persistence
                         Category = "culture",
                         City = "London",
                         Venue = "Natural History Museum",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[2],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[1],
+                                IsHost = false
+                            }
+                        }
+                        
                     },
                     new Activity
                     {
@@ -80,6 +112,19 @@ namespace Infrastructure.Persistence
                         Category = "music",
                         City = "London",
                         Venue = "O2 Arena",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[0],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[2],
+                                IsHost = false
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -89,6 +134,19 @@ namespace Infrastructure.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Another pub",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[1],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[0],
+                                IsHost = false
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -98,6 +156,14 @@ namespace Infrastructure.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Yet another pub",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                               new ActivityAttendee
+                            {
+                                ApplicationUser = users[1],
+                                IsHost = true
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -107,6 +173,19 @@ namespace Infrastructure.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Just another pub",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[0],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[1],
+                                IsHost = false
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -116,6 +195,19 @@ namespace Infrastructure.Persistence
                         Category = "music",
                         City = "London",
                         Venue = "Roundhouse Camden",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[2],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[1],
+                                IsHost = false
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -125,6 +217,19 @@ namespace Infrastructure.Persistence
                         Category = "travel",
                         City = "London",
                         Venue = "Somewhere on the Thames",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[0],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[2],
+                                IsHost = false
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -134,11 +239,25 @@ namespace Infrastructure.Persistence
                         Category = "film",
                         City = "London",
                         Venue = "Cinema",
+                        Attendees = new List<ActivityAttendee>
+                        {
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[2],
+                                IsHost = true
+                            },
+                            new ActivityAttendee
+                            {
+                                ApplicationUser = users[1],
+                                IsHost = false
+                            }
+                        }
                     }
                 };
+
                 await context.Activities.AddRangeAsync(activities);
                 await context.SaveChangesAsync();
-            }            
+            }           
         }
     }
 }
