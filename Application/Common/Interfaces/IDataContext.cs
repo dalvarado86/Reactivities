@@ -9,6 +9,7 @@ namespace Application.Common.Interfaces
     {
         DbSet<Activity> Activities { get; set; }
         DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+        DbSet<Photo> Photos { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancelationToken);
     }
 }

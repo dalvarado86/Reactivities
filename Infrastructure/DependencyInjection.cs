@@ -2,6 +2,7 @@ using System.Text;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Infrastructure.Persistence;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,6 +49,7 @@ namespace Infrastructure
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 
             services.AddAuthorization(options =>
             {
@@ -58,6 +60,8 @@ namespace Infrastructure
             });
 
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+
+            services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 
             return services;
         }
