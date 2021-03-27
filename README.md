@@ -15,7 +15,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * Automapper
 * FluentValidation
 * ASP .NET Core Identity
-* Cloudinary
+* Cloudinary API
 
 ### React 17
 * MobX
@@ -28,6 +28,8 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * Formik + Yup
 * React Datepicker
 * Date-Fns
+* React Dropzone
+* React Cropper
 
 ## Getting Started
 

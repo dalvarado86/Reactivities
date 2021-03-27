@@ -10,6 +10,7 @@ import ActivityDetails from "../../features/Activities/Details/ActivityDetails";
 import NotFound from "../../features/Errors/NotFound";
 import ServerError from "../../features/Errors/ServerError";
 import TestErrors from "../../features/Errors/TestError";
+import ProfilePage from "../../features/profiles/ProfilePage";
 import { ToastContainer } from "react-toastify";
 import LoginForm from "../../features/users/LoginForm";
 import { useStore } from "../stores/store";
@@ -51,6 +52,7 @@ function App() {
                   path={["/createActivity", "/manage/:id"]}
                   component={ActivityForm}
                 />
+                <Route path="/profiles/:username" component={ProfilePage} />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />
                 <Route path="/login" component={LoginForm} />
