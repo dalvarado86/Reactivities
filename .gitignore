@@ -6,6 +6,7 @@
 Infrastructure/Persistence/Migrations/
 appsettings.json
 *.db
+package-lock.json
 
 # User-specific files
 *.rsuser
