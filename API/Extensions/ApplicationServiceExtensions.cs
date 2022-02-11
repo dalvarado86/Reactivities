@@ -15,7 +15,7 @@ namespace API.Extensions
 
             services.AddCors(options => 
             {
-                options.AddPolicy("CorsPolicy", policy => 
+                options.AddPolicy(name: "CorsPolicy", policy => 
                 {
                     policy.AllowAnyMethod()
                     .AllowAnyHeader()

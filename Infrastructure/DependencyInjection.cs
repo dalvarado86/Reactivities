@@ -19,7 +19,6 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-
             // Adding SQLite DbContext service
             services.AddDbContext<DataContext>(options =>
             {
