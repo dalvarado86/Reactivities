@@ -16,6 +16,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * FluentValidation
 * ASP .NET Core Identity
 * Cloudinary API
+* SignalR
 
 ### React 17
 * MobX
@@ -30,6 +31,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * Date-Fns
 * React Dropzone
 * React Cropper
+* Microsoft SignalR
 
 ## Getting Started
 
@@ -78,5 +80,3 @@ This layer is a Web API based on ASP.NET Core 5. This layer depends on both the 
 This is a client app based on React with typescript, it represent the front-end of this application.
 
 Enjoy!
-And if you want 
-<a href="https://www.buymeacoffee.com/dealvarado" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
