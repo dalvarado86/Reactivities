@@ -19,15 +19,18 @@ namespace API.Extensions
                 {
                     policy.AllowAnyMethod()
                     .AllowAnyHeader()
+                    .AllowCredentials()
                     .WithOrigins(configuration["Tokens:Audience"]);
                 });
             });
+
+            services.AddSignalR();
              
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reactivities API", Version = "v1" });
             }); 
-
+            
             return services;
         }
     }

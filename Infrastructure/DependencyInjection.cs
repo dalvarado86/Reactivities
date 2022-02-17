@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Infrastructure.Persistence;
@@ -43,6 +44,22 @@ namespace Infrastructure
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Tokens:Key"])),
                         ValidateIssuer = false,
                         ValidateAudience = false
+                    };
+
+                    options.Events = new JwtBearerEvents 
+                    {
+                        OnMessageReceived = context => 
+                        {
+                            var accesToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+
+                            if (!string.IsNullOrEmpty(accesToken) && (path.StartsWithSegments("/chat")))
+                            {
+                                context.Token = accesToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });           
 

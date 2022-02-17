@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Application.Common.Models;
 
 namespace Application.Common.DTOs
 {
