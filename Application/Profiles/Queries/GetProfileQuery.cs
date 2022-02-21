@@ -22,9 +22,16 @@ namespace Application.Profiles.Queries
         private readonly IDataContext _context;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
-        public HandlerGetProfileQuery(IDataContext context, IMapper mapper, UserManager<ApplicationUser> userManager)
+        private readonly IUserAccessor _userAccessor;
+
+        public HandlerGetProfileQuery(
+            IDataContext context, 
+            IMapper mapper, 
+            UserManager<ApplicationUser> userManager,
+            IUserAccessor userAccessor)
         {
             _userManager = userManager;
+            _userAccessor = userAccessor;
             _mapper = mapper;
             _context = context;
         }
@@ -32,7 +39,9 @@ namespace Application.Profiles.Queries
         public async Task<Result<Profile>> Handle(GetProfileQuery request, CancellationToken cancellationToken)
         {
             var user = await _userManager.Users
-                .ProjectTo<Profile>(_mapper.ConfigurationProvider)
+                .ProjectTo<Profile>(
+                    _mapper.ConfigurationProvider,
+                    new { currentUsername = _userAccessor.GetUsername() })
                 .SingleOrDefaultAsync(x => x.Username == request.Username);
             
             if(user == null)

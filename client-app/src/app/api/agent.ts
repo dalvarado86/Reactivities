@@ -16,46 +16,46 @@ axios.defaults.baseURL = 'http://localhost:5000/api';
 
 axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
-    
-    if(token) 
+
+    if (token)
         config.headers.Authorization = `Bearer ${token}`
-    
+
     return config;
 });
 
-axios.interceptors.response.use(async response => {    
+axios.interceptors.response.use(async response => {
     await sleep(1000);
     return response;
 
 }, (error: AxiosError) => {
-    const {data, status, config} = error.response!;
-    
-    switch(status) {
-        case 400: 
-            if(typeof data === 'string') {
+    const { data, status, config } = error.response!;
+
+    switch (status) {
+        case 400:
+            if (typeof data === 'string') {
                 toast.error(data);
             }
 
-            if(config.method === 'get' && data.errors.hasOwnProperty('id')) {
+            if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
                 history.push('/not-found');
             }
 
-            if(data.errors) {
+            if (data.errors) {
                 const modalStateErrors = [];
-                for(const key in data.errors) {
-                    if(data.errors[key]) {
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
                         modalStateErrors.push(data.errors[key]);
-                    }                    
+                    }
                 }
 
                 throw modalStateErrors.flat();
-            }        
+            }
             break;
         case 401: toast.error('Unauthorized'); break;
-        case 404: 
+        case 404:
             history.push('/not-found');
             break;
-        case 500: 
+        case 500:
             store.commonStore.setServerError(data);
             history.push('/server-error');
             break;
@@ -64,13 +64,13 @@ axios.interceptors.response.use(async response => {
     return Promise.reject(error);
 })
 
-const responseBody = <T> (response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
-    get: <T> (url: string) => axios.get<T>(url).then(responseBody),
-    post: <T> (url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-    delete: <T> (url: string) => axios.delete<T>(url).then(responseBody),
+    get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+    post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
+    put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+    delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 }
 
 const Activities = {
@@ -94,11 +94,14 @@ const Profiles = {
         let formData = new FormData();
         formData.append('File', file);
         return axios.post<Photo>('photos', formData, {
-            headers: {'Content-type': 'multipart/form-data'}
+            headers: { 'Content-type': 'multipart/form-data' }
         })
     },
     setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
-    deletePhoto: (id: string) => requests.delete(`/photos/${id}`)
+    deletePhoto: (id: string) => requests.delete(`/photos/${id}`),
+    updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
+    updateFollowing: (username: String) => requests.post(`/follow/${username}`, {}),
+    listFollowings: (username: String, predicate: String) => requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
 }
 
 const agent = {

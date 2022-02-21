@@ -28,7 +28,8 @@ namespace Application.Activities.Commands
         private readonly IUserAccessor _userAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public HandlerCreateActivityCommand(IDataContext context,
+        public HandlerCreateActivityCommand(
+            IDataContext context,
             IUserAccessor userAccessor,
             UserManager<ApplicationUser> userManager)
         {
