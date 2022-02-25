@@ -16,7 +16,6 @@ export class Profile implements Profile {
         this.username = user.username;
         this.displayName = user.displayName;
         this.image = user.image;
-        //this.bio = user.bio;
     }
 }
 
@@ -25,3 +24,10 @@ export interface Photo {
     url: string;
     isMain: boolean;
 }
+
+export interface UserActivity {
+    id: string;
+    title: string;
+    category: string;
+    date: Date;
+} 

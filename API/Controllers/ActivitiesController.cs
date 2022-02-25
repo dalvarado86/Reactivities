@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Application.Activities.Commands;
 using Application.Activities.Queries;
+using Application.Common.Models;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,9 @@ namespace API.Controllers
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetActivities()
+        public async Task<IActionResult> GetActivities([FromQuery]ActivityParams param)
         {
-            return HandleResult(await Mediator.Send(new GetActivitiesQuery()));
+            return HandlePagedResult(await Mediator.Send(new GetActivitiesQuery { Params = param }));
         }
 
         [HttpGet("{id}")]

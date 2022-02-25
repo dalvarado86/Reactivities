@@ -32,6 +32,7 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 * React Dropzone
 * React Cropper
 * Microsoft SignalR
+* React Infinite Scroller
 
 ## Getting Started
 
