@@ -31,7 +31,7 @@ namespace API.Controllers
 
         [Authorize(Policy = "IsActivityHost")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> EditActivity(Guid id, Activity activity)
+        public async Task<ActionResult> EditActivity(string id, Activity activity)
         {
             activity.Id = id;
             return HandleResult(await Mediator.Send(new EditActivityCommand { Activity = activity }));
@@ -45,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpPost("{id}/attend")]
-        public async Task<IActionResult> Attend(Guid id)
+        public async Task<IActionResult> Attend(string id)
         {
             return HandleResult(await Mediator.Send(new UpdateAttendanceCommand { Id = id }));
         }

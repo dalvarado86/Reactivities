@@ -13,7 +13,7 @@ namespace Application.Activities.Commands
 {
     public class UpdateAttendanceCommand : IRequest<Result<Unit>>
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
     }
 
     public class HandlerUpdateAttendanceCommand : IRequestHandler<UpdateAttendanceCommand, Result<Unit>>

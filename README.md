@@ -4,35 +4,8 @@ Based on of Neils Cummings's course on Udemy [Complete Guide to Building an App 
 ## Features
 
 ## Prerequisites
-* [.NET Core SDK](https://dotnet.microsoft.com/download) (5.0.1 or later)
+* [.NET Core SDK](https://dotnet.microsoft.com/download) (9 or later)
 * [Node.js](https://nodejs.org/en/download/current/) (15.9.0 or later)
-
-## Technologies
-
-### ASP .NET CORE 5
-* Entity Framework Core
-* MediatR
-* Automapper
-* FluentValidation
-* ASP .NET Core Identity
-* Cloudinary API
-* SignalR
-
-### React 17
-* MobX
-* Axios
-* React Router
-* UUID
-* Semantic UI React
-* React Calendar
-* React Toastify
-* Formik + Yup
-* React Datepicker
-* Date-Fns
-* React Dropzone
-* React Cropper
-* Microsoft SignalR
-* React Infinite Scroller
 
 ## Getting Started
 
@@ -74,7 +47,7 @@ This layer contains classes for accessing external resources such as persistence
 
 ### API
 
-This layer is a Web API based on ASP.NET Core 5. This layer depends on both the Application and Infrastructure layers, however, the dependency on Infrastructure is only to support dependency injection. Therefore only *Startup.cs* should reference Infrastructure.
+This layer is a Web API based on ASP.NET Core 7. This layer depends on both the Application and Infrastructure layers, however, the dependency on Infrastructure is only to support dependency injection. Therefore only *Startup.cs* should reference Infrastructure.
 
 ### Clien-App
 

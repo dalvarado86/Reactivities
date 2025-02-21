@@ -15,7 +15,7 @@ namespace Application.Comments.Queries
 {
     public class GetCommentsQuery : IRequest<Result<List<CommentDto>>>
     {
-        public Guid ActivityId { get; set; }
+        public string ActivityId { get; set; } = Guid.NewGuid().ToString();
     }
 
     public class HandlerGetCommentsCommand : IRequestHandler<GetCommentsQuery, Result<List<CommentDto>>>
